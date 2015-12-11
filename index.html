@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta charset="utf-8">
+  	<title>Game of Life</title>
+  	<script type="text/javascript" src="js/jquery.js"></script>
+  	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  	<link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.css">
+  </head>
+  <body>
+    <div class="container">
+      <button id="next" class="btn btn-success">Siguiente generación</button>
+      <br/>
+      <canvas id="tablero" width="500" height="500" style="border:1px solid #000000;">
+      </canvas>
+    </div>
+  <script type="text/javascript">
+      $( document ).ready(function() {
+        var tab = document.getElementById('tablero');
+        var context = tab.getContext('2d');
+        var text = "";
+        context.font = "25px serif";
+        context.fillText(text, 20, 50);
+        context.font = "10px serif";
+        cells = firstGeneration();
+        draw(cells, context);
+        $( "#next" ).click(function() {
+          cells = next(cells);
+          draw(cells, context);
+        });
+
+      });
+
+      function draw(tablero, context) {
+        for (var i=0;i<20;i++)
+        {
+            for (var j=0;j<20;j++)
+            {
+                if (tablero[i][j]==true)
+                {
+                    context.fillStyle = "rgb(0, 0, 0)";
+                }
+                else
+                {
+                    context.fillStyle = "rgb(255, 255, 255)";
+                }
+                context.fillRect(20+i*30, 50+j*30, 30, 30);
+            }
+        }
+      }
+
+      function firstGeneration() {
+        var cells = [];
+        for (var i = 0; i < 20; i++)
+        {
+          cells[i] = [];
+          for (var j = 0; j<20; j++)
+          {
+            if(Math.floor((Math.random()*10)+1) %2 == 0)
+            {
+              cells[i][j]=true;
+            }
+            else
+            {
+              cells[i][j] = false;
+            }
+          }
+        }
+        return cells;
+      }
+
+
+      function next(cells) {
+        var next = cells;
+        var vecinos = 0;
+        for (var i=0;i<20;i++)
+        {
+            for (var j=0;j<20;j++)
+            {
+              for (var x = i - 1; x <= i + 1; x++)
+              {
+                for (var y = j - 1; y <= j + 1; y++)
+                {
+                  if(x!=-1 && y!=-1)
+                  {
+                    if(x < 20 && y < 20)
+                    {
+                      if(cells[x][y] != cells[i][j])
+                      {
+                        if(cells[x][y] == true)
+                        {
+                          vecinos++;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              if(vecinos==3)
+              {
+                next[i][j] = true;
+              }
+              else
+              {
+                if (vecinos==2 && cells[i][j]==true)
+                {
+                  next[i][j]=true;
+                }
+                else
+                {
+                  next[i][j]=false;
+                }
+              }
+              vecinos = 0;
+            }
+          }
+          return next;
+        }
+
+
+    </script>
+
+  </body>
+</html>
