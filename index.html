@@ -23,7 +23,7 @@
         context.font = "25px serif";
         context.fillText(text, 20, 50);
         context.font = "10px serif";
-        cells = firstGeneration();
+        var cells = firstGeneration();
         draw(cells, context);
         $( "#next" ).click(function() {
           cells = next(cells);
@@ -72,10 +72,11 @@
 
 
       function next(cells) {
-        var next = cells;
+        var count = [];
         var vecinos = 0;
         for (var i=0;i<20;i++)
         {
+          count[i]=[];
             for (var j=0;j<20;j++)
             {
               for (var x = i - 1; x <= i + 1; x++)
@@ -86,7 +87,7 @@
                   {
                     if(x < 20 && y < 20)
                     {
-                      if(cells[x][y] != cells[i][j])
+                      if(x != i || y !=j)
                       {
                         if(cells[x][y] == true)
                         {
@@ -97,27 +98,31 @@
                   }
                 }
               }
-              if(vecinos==3)
-              {
-                next[i][j] = true;
-              }
-              else
-              {
-                if (vecinos==2 && cells[i][j]==true)
-                {
-                  next[i][j]=true;
-                }
-                else
-                {
-                  next[i][j]=false;
-                }
-              }
+              console.log(vecinos);
+              count[i][j] = vecinos;
               vecinos = 0;
             }
           }
-          return next;
+          return killer(cells, count);
         }
 
+        function killer(c, v) {
+          for (var i=0;i<20;i++)
+          {
+              for (var j=0;j<20;j++)
+              {
+                if(v[i][j]< 2 || v[i][j] > 3)
+                {
+                  c[i][j] = false;
+                }
+                else if(v[i][j] ==3)
+                {
+                  c[i][j] = true;
+                }
+              }
+          }
+          return c;
+        }
 
     </script>
 
