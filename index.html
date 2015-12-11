@@ -9,10 +9,12 @@
   	<link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.css">
   </head>
   <body>
-    <div class="container">
-      <button id="next" class="btn btn-success">Siguiente generación</button>
-      <br/>
-      <canvas id="tablero" width="500" height="500" style="border:1px solid #000000;">
+    <div class="container" style="text-align: center">
+      <div class="padding">
+        <h1>Game of life</h1>
+        <button id="next" class="btn btn-primary">Next generation</button>
+      </div>
+      <canvas id="tablero" width="650" height="650" style="border:1px solid #000000;">
       </canvas>
     </div>
   <script type="text/javascript">
@@ -32,6 +34,7 @@
 
       });
 
+      //Method to draw the cells in the screen, alive is black, death is white
       function draw(tablero, context) {
         for (var i=0;i<20;i++)
         {
@@ -50,6 +53,7 @@
         }
       }
 
+      //generate randomly the first generation of cells
       function firstGeneration() {
         var cells = [];
         for (var i = 0; i < 20; i++)
@@ -70,10 +74,10 @@
         return cells;
       }
 
-
+      // the next generation, from the original generation
       function next(cells) {
-        var count = [];
-        var vecinos = 0;
+        var count = []; //count the neighbour of each cell
+        var vecinos = 0; //temp var
         for (var i=0;i<20;i++)
         {
           count[i]=[];
@@ -83,15 +87,15 @@
               {
                 for (var y = j - 1; y <= j + 1; y++)
                 {
-                  if(x!=-1 && y!=-1)
+                  if(x!=-1 && y!=-1) //To validate the edges
                   {
-                    if(x < 20 && y < 20)
+                    if(x < 20 && y < 20) //to validate edges
                     {
-                      if(x != i || y !=j)
+                      if(x != i || y !=j) //to not count the actual cell
                       {
                         if(cells[x][y] == true)
                         {
-                          vecinos++;
+                          vecinos++; //alive neighbour
                         }
                       }
                     }
@@ -99,13 +103,14 @@
                 }
               }
               console.log(vecinos);
-              count[i][j] = vecinos;
+              count[i][j] = vecinos; //save the count of neighbours in each position
               vecinos = 0;
             }
           }
-          return killer(cells, count);
+          return killer(cells, count); //return the next generation, from the original generation and the count of neighbours
         }
 
+        // define if a cell keep alive or not
         function killer(c, v) {
           for (var i=0;i<20;i++)
           {
@@ -119,9 +124,13 @@
                 {
                   c[i][j] = true;
                 }
+                else if(v[i][j]==2 && c[i][j] == true)
+                {
+                  c[i][j] = true;
+                }
               }
           }
-          return c;
+          return c; //return the new generation of cells
         }
 
     </script>
